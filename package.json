@@ -1,0 +1,32 @@
+{
+  "name": "sn-trade-web",
+  "version": "0.0.1",
+  "description": "super engine trade for web",
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sorrymeika/sn-trade-web.git"
+  },
+  "author": "sunlu",
+  "bugs": {
+    "url": "https://github.com/sorrymeika/sn-trade-web/issues"
+  },
+  "homepage": "https://github.com/sorrymeika/sn-trade-web#readme",
+  "devDependencies": {
+    "egg-bin": "^4.13.1"
+  },
+  "dependencies": {
+    "egg": "^2.23.0",
+    "egg-cors": "^2.2.0",
+    "egg-logger": "^2.4.1",
+    "egg-logrotator": "^3.1.0",
+    "egg-mysql": "^3.0.0",
+    "egg-validate": "^2.0.2",
+    "eslint": "^6.3.0",
+    "koa-compress": "^3.0.0"
+  },
+  "scripts": {
+    "dev": "node scripts/dev.js && egg-bin dev --port 7003",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  }
+}
