@@ -13,7 +13,7 @@ exports.validate = {
     package: 'egg-validate',
 };
 
-exports.snauth = {
-    enable: true,
-    package: 'egg-snauth',
-};
+// exports.snauth = {
+//     enable: true,
+//     package: 'egg-snauth',
+// };
