@@ -47,9 +47,7 @@ class FormulaController extends Controller {
             id
         } = body;
 
-        const result = await ctx.service.formula.getFormulaById({
-            id
-        });
+        const result = await ctx.service.formula.getFormulaById(id);
         ctx.body = result;
     }
 
@@ -98,7 +96,7 @@ class FormulaController extends Controller {
 
         const body = ctx.request.body;
 
-        const result = await ctx.service.formula.addFormula(body);
+        const result = await ctx.service.formula.updateFormula(body);
         ctx.body = result;
     }
 }

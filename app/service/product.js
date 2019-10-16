@@ -1,6 +1,7 @@
 const { Service } = require("egg");
 
 class ProductService extends Service {
+    // 后台接口
     listSpuTypes() {
         return this.ctx.productRPC.invoke('product.listSpuTypes');
     }
@@ -39,7 +40,7 @@ class ProductService extends Service {
         }]);
     }
 
-    async getSpuById(id) {
+    getSpuById(id) {
         return this.ctx.productRPC.invoke('product.getSpuById', [id]);
     }
 
@@ -141,16 +142,75 @@ class ProductService extends Service {
         }]);
     }
 
-    listAllSkusBySpuId(spuId) {
-        return this.ctx.productRPC.invoke('product.listAllSkusBySpuId', [spuId]);
-    }
-
     addSku({ spuId, code, price, kgWeight, picture, stockType, stock, skuPropVal0, skuPropVal1, skuPropVal2, skuPropVal3, skuPropVal4 }) {
         return this.ctx.productRPC.invoke('product.addSku', [{ spuId, code, price, kgWeight, picture, stockType, stock, skuPropVal0, skuPropVal1, skuPropVal2, skuPropVal3, skuPropVal4 }]);
     }
 
     updateSku({ id, price, kgWeight, picture, stockType, stock, skuPropVal0, skuPropVal1, skuPropVal2, skuPropVal3, skuPropVal4 }) {
         return this.ctx.productRPC.invoke('product.updateSku', [{ id, price, kgWeight, picture, stockType, stock, skuPropVal0, skuPropVal1, skuPropVal2, skuPropVal3, skuPropVal4 }]);
+    }
+
+    // 前台接口
+    getProductById(id) {
+        return Promise.all([
+            this.ctx.productRPC.invoke('product.getBasicById', [id])
+                .then((res) => {
+                    return Promise.all([
+                        this.ctx.sellerRPC.invoke('seller.getSellerInfoById', [res.data.sellerId]),
+                        this.ctx.productRPC.invoke('category.listSpuPropDefinitionsWithColumns', [res.data.subSubCateId])
+                    ])
+                        .then(([seller, spuPropDefinitions]) => {
+                            res.seller = seller.data;
+                            res.spuPropDefinitions = spuPropDefinitions.data;
+                            return res;
+                        });
+                }),
+            this.ctx.productRPC.invoke('product.listAllSkusBySpuId', [id]),
+        ])
+            .then(([basic, skus]) => {
+                let minPrice = skus.data[0].price;
+                let maxPrice = skus.data[0].price;
+
+                for (let i = 1; i < skus.data.length; i++) {
+                    let sku = skus.data[i];
+                    if (sku.price < minPrice) {
+                        minPrice = sku.price;
+                    }
+                    if (sku.price > maxPrice) {
+                        maxPrice = sku.price;
+                    }
+                }
+
+                const spuProps = basic.data.props ? JSON.parse(basic.data.props) : {};
+
+                return {
+                    success: true,
+                    code: 0,
+                    data: {
+                        item: Object.assign(basic.data, {
+                            price: minPrice,
+                            minPrice,
+                            maxPrice,
+                        }),
+                        seller: basic.seller,
+                        spuProps: basic.spuPropDefinitions
+                            ? basic.spuPropDefinitions.map((prop) => ({
+                                ...prop,
+                                value: spuProps[prop.field]
+                            }))
+                            : [],
+                        skus: skus.data
+                    }
+                };
+            });
+    }
+
+    getDetailById(id) {
+        return this.ctx.productRPC.invoke('product.getDetailById', [id]);
+    }
+
+    listAllSkusBySpuId(spuId) {
+        return this.ctx.productRPC.invoke('product.listAllSkusBySpuId', [spuId]);
     }
 }
 

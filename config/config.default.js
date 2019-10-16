@@ -57,11 +57,6 @@ exports.snauth = {
     registry: {
         port: 3006
     },
-    excludes: [
-        '/auth/login',
-        '/test/testUpload',
-        '/test/testFile'
-    ],
     permissions: require('./permissions'),
 };
 

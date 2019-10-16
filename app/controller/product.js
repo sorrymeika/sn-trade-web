@@ -52,6 +52,28 @@ class ProductController extends Controller {
         ctx.body = res;
     }
 
+    async getProductById() {
+        const { ctx } = this;
+        const payloadRule = {
+            id: { type: 'number', required: true },
+        };
+        ctx.validate(payloadRule);
+
+        const res = await ctx.service.product.getProductById(ctx.request.body.id);
+        ctx.body = res;
+    }
+
+    async getDetailById() {
+        const { ctx } = this;
+        const payloadRule = {
+            id: { type: 'number', required: true },
+        };
+        ctx.validate(payloadRule);
+
+        const res = await ctx.service.product.getDetailById(ctx.request.body.id);
+        ctx.body = res;
+    }
+
     async addSpu() {
         const { ctx } = this;
 
@@ -83,7 +105,6 @@ class ProductController extends Controller {
         const res = await ctx.service.product.addSpu(ctx.request.body);
         ctx.body = res;
     }
-
 
     async updateSpu() {
         const { ctx } = this;
