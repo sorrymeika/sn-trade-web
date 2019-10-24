@@ -1,7 +1,20 @@
 const { Controller } = require("egg");
 const { NO_PERMISSION } = require("../constants/error");
+const { json } = require("../core/response");
 
 class CartController extends Controller {
+    async countCartTotalNum() {
+        const { ctx } = this;
+
+        if (!ctx.accountId) {
+            ctx.body = { ...NO_PERMISSION, message: '请先登录！' };
+            return;
+        }
+
+        const result = await ctx.service.cart.countCartTotalNum(ctx.accountId);
+        ctx.body = json(result);
+    }
+
     async listUserCart() {
         const { ctx } = this;
 
@@ -11,7 +24,7 @@ class CartController extends Controller {
         }
 
         const result = await ctx.service.cart.listUserCart(ctx.accountId);
-        ctx.body = result;
+        ctx.body = json(result);
     }
 
     async addSkuToCart() {
@@ -38,7 +51,7 @@ class CartController extends Controller {
         } = body;
 
         const result = await ctx.service.cart.addSkuToCart(skuId, num, ctx.accountId, price);
-        ctx.body = result;
+        ctx.body = json(result);
     }
 
     async updateCartNum() {
@@ -64,9 +77,9 @@ class CartController extends Controller {
 
         const result = await ctx.service.cart.updateCartNum(ctx.accountId, cartId, num);
         if (result.success) {
-            ctx.body = await ctx.service.cart.listUserCart(ctx.accountId);
+            ctx.body = json(await ctx.service.cart.listUserCart(ctx.accountId));
         } else {
-            ctx.body = result;
+            ctx.body = json(result);
         }
     }
 
@@ -93,9 +106,9 @@ class CartController extends Controller {
 
         const result = await ctx.service.cart.updateCartSelected(ctx.accountId, cartId, selected);
         if (result.success) {
-            ctx.body = await ctx.service.cart.listUserCart(ctx.accountId);
+            ctx.body = json(await ctx.service.cart.listUserCart(ctx.accountId));
         } else {
-            ctx.body = result;
+            ctx.body = json(result);
         }
     }
 
@@ -109,7 +122,7 @@ class CartController extends Controller {
         ctx.validate(payloadRule);
 
         if (!ctx.accountId) {
-            ctx.body = { ...NO_PERMISSION, message: '请先登录！' };
+            ctx.body = json({ ...NO_PERMISSION, message: '请先登录！' });
             return;
         }
 
@@ -122,9 +135,9 @@ class CartController extends Controller {
 
         const result = await ctx.service.cart.updateSelectedByCartIds(ctx.accountId, cartIds, selected);
         if (result.success) {
-            ctx.body = await ctx.service.cart.listUserCart(ctx.accountId);
+            ctx.body = json(await ctx.service.cart.listUserCart(ctx.accountId));
         } else {
-            ctx.body = result;
+            ctx.body = json(result);
         }
     }
 
@@ -149,9 +162,9 @@ class CartController extends Controller {
 
         const result = await ctx.service.cart.updateAllSelected(ctx.accountId, selected);
         if (result.success) {
-            ctx.body = await ctx.service.cart.listUserCart(ctx.accountId);
+            ctx.body = json(await ctx.service.cart.listUserCart(ctx.accountId));
         } else {
-            ctx.body = result;
+            ctx.body = json(result);
         }
     }
 }

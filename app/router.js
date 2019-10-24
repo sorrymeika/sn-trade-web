@@ -56,8 +56,10 @@ module.exports = app => {
 
     // 商品
     router.post('/product/getProductById', controller.product.getProductById);
+    router.post('/product/getDetailById', controller.product.getDetailById);
 
     // 购物车
+    router.post('/cart/countCartTotalNum', controller.cart.countCartTotalNum);
     router.post('/cart/listUserCart', controller.cart.listUserCart);
     router.post('/cart/addSkuToCart', controller.cart.addSkuToCart);
     router.post('/cart/updateCartNum', controller.cart.updateCartNum);
@@ -67,5 +69,8 @@ module.exports = app => {
 
     // 订单
     router.post('/order/getOrderBySkus', controller.order.getOrderBySkus);
+    router.post('/order/listOrder', controller.order.listOrder);
+    router.post('/order/getOrderById', controller.order.getOrderById);
     router.post('/order/createOrder', controller.order.createOrder);
+    router.post('/order/cancelOrder', controller.order.cancelOrder);
 };

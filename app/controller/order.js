@@ -1,7 +1,48 @@
 const { Controller } = require("egg");
 const { NO_PERMISSION } = require("../constants/error");
+const { json } = require("../core/response");
 
 class OrderController extends Controller {
+    async listOrder() {
+        const { ctx } = this;
+        const payloadRule = {
+            type: { type: 'number', required: true },
+            pageIndex: { type: 'number', required: true },
+            pageSize: { type: 'number', required: true }
+        };
+        ctx.validate(payloadRule);
+
+        if (!ctx.accountId) {
+            ctx.body = json({ ...NO_PERMISSION, message: '请先登录！' });
+            return;
+        }
+
+        const body = ctx.request.body;
+        const { type, pageIndex, pageSize } = body;
+
+        const result = await ctx.service.order.listOrder(ctx.accountId, type, pageIndex, pageSize);
+        ctx.body = json(result);
+    }
+
+    async getOrderById() {
+        const { ctx } = this;
+        const payloadRule = {
+            orderId: { type: 'number', required: true },
+        };
+        ctx.validate(payloadRule);
+
+        if (!ctx.accountId) {
+            ctx.body = json({ ...NO_PERMISSION, message: '请先登录！' });
+            return;
+        }
+
+        const body = ctx.request.body;
+        const { orderId } = body;
+
+        const result = await ctx.service.order.getOrderById(ctx.accountId, orderId);
+        ctx.body = json(result);
+    }
+
     async getOrderBySkus() {
         const { ctx } = this;
 
@@ -20,7 +61,7 @@ class OrderController extends Controller {
         ctx.validate(payloadRule);
 
         if (!ctx.accountId) {
-            ctx.body = { ...NO_PERMISSION, message: '请先登录！' };
+            ctx.body = json({ ...NO_PERMISSION, message: '请先登录！' });
             return;
         }
 
@@ -28,7 +69,7 @@ class OrderController extends Controller {
         const { skus } = body;
 
         const result = await ctx.service.order.getOrderBySkus(skus);
-        ctx.body = result;
+        ctx.body = json(result);
     }
 
     async createOrder() {
@@ -69,7 +110,7 @@ class OrderController extends Controller {
         ctx.validate(payloadRule);
 
         if (!ctx.accountId) {
-            ctx.body = { ...NO_PERMISSION, message: '请先登录！' };
+            ctx.body = json({ ...NO_PERMISSION, message: '请先登录！' });
             return;
         }
 
@@ -77,7 +118,26 @@ class OrderController extends Controller {
         const { sellerList, addressId } = body;
 
         const result = await ctx.service.order.createOrder(ctx.accountId, sellerList, addressId);
-        ctx.body = result;
+        ctx.body = json(result);
+    }
+
+    async cancelOrder() {
+        const { ctx } = this;
+        const payloadRule = {
+            orderId: { type: 'number', required: true },
+        };
+        ctx.validate(payloadRule);
+
+        if (!ctx.accountId) {
+            ctx.body = json({ ...NO_PERMISSION, message: '请先登录！' });
+            return;
+        }
+
+        const body = ctx.request.body;
+        const { orderId } = body;
+
+        const result = await ctx.service.order.cancelOrder(ctx.accountId, orderId);
+        ctx.body = json(result);
     }
 }
 

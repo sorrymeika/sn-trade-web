@@ -96,6 +96,9 @@ module.exports = [
         url: '/cart/listUserCart',
         apps: [3]
     }, {
+        url: '/cart/countCartTotalNum',
+        apps: [3]
+    }, {
         url: '/cart/updateCartNum',
         apps: [3]
     }, {
@@ -111,10 +114,19 @@ module.exports = [
 
     // 订单权限
     {
+        url: '/order/listOrder',
+        apps: [3]
+    }, {
+        url: '/order/getOrderById',
+        apps: [3]
+    }, {
         url: '/order/getOrderBySkus',
         apps: [3]
     }, {
         url: '/order/createOrder',
+        apps: [3]
+    }, {
+        url: '/order/cancelOrder',
         apps: [3]
     }
 ];

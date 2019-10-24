@@ -1,6 +1,10 @@
 const { Service } = require("egg");
 
 class CartService extends Service {
+    countCartTotalNum(userId) {
+        return this.ctx.tradeRPC.invoke('cart.countCartTotalNum', [userId]);
+    }
+
     listUserCart(userId) {
         return this.ctx.tradeRPC.invoke('cart.listUserCart', [userId]);
     }
