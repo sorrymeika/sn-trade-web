@@ -1,6 +1,5 @@
 const { Controller } = require("egg");
 const { NO_PERMISSION } = require("../constants/error");
-const { json } = require("../core/response");
 
 class OrderController extends Controller {
     async listOrder() {
@@ -13,7 +12,7 @@ class OrderController extends Controller {
         ctx.validate(payloadRule);
 
         if (!ctx.accountId) {
-            ctx.body = json({ ...NO_PERMISSION, message: '请先登录！' });
+            ctx.body = { ...NO_PERMISSION, message: '请先登录！' };
             return;
         }
 
@@ -21,7 +20,7 @@ class OrderController extends Controller {
         const { type, pageIndex, pageSize } = body;
 
         const result = await ctx.service.order.listOrder(ctx.accountId, type, pageIndex, pageSize);
-        ctx.body = json(result);
+        ctx.body = result;
     }
 
     async getOrderById() {
@@ -32,7 +31,7 @@ class OrderController extends Controller {
         ctx.validate(payloadRule);
 
         if (!ctx.accountId) {
-            ctx.body = json({ ...NO_PERMISSION, message: '请先登录！' });
+            ctx.body = { ...NO_PERMISSION, message: '请先登录！' };
             return;
         }
 
@@ -40,7 +39,26 @@ class OrderController extends Controller {
         const { orderId } = body;
 
         const result = await ctx.service.order.getOrderById(ctx.accountId, orderId);
-        ctx.body = json(result);
+        ctx.body = result;
+    }
+
+    async getSellerOrderById() {
+        const { ctx } = this;
+        const payloadRule = {
+            sellerOrderId: { type: 'number', required: true },
+        };
+        ctx.validate(payloadRule);
+
+        if (!ctx.accountId) {
+            ctx.body = { ...NO_PERMISSION, message: '请先登录！' };
+            return;
+        }
+
+        const body = ctx.request.body;
+        const { sellerOrderId } = body;
+
+        const result = await ctx.service.order.getSellerOrderById(ctx.accountId, sellerOrderId);
+        ctx.body = result;
     }
 
     async getOrderBySkus() {
@@ -61,7 +79,7 @@ class OrderController extends Controller {
         ctx.validate(payloadRule);
 
         if (!ctx.accountId) {
-            ctx.body = json({ ...NO_PERMISSION, message: '请先登录！' });
+            ctx.body = { ...NO_PERMISSION, message: '请先登录！' };
             return;
         }
 
@@ -69,7 +87,7 @@ class OrderController extends Controller {
         const { skus } = body;
 
         const result = await ctx.service.order.getOrderBySkus(skus);
-        ctx.body = json(result);
+        ctx.body = result;
     }
 
     async createOrder() {
@@ -110,7 +128,7 @@ class OrderController extends Controller {
         ctx.validate(payloadRule);
 
         if (!ctx.accountId) {
-            ctx.body = json({ ...NO_PERMISSION, message: '请先登录！' });
+            ctx.body = { ...NO_PERMISSION, message: '请先登录！' };
             return;
         }
 
@@ -118,26 +136,40 @@ class OrderController extends Controller {
         const { sellerList, addressId } = body;
 
         const result = await ctx.service.order.createOrder(ctx.accountId, sellerList, addressId);
-        ctx.body = json(result);
+        ctx.body = result;
     }
 
     async cancelOrder() {
         const { ctx } = this;
         const payloadRule = {
-            orderId: { type: 'number', required: true },
+            sellerOrderId: { type: 'number', required: true },
         };
         ctx.validate(payloadRule);
 
         if (!ctx.accountId) {
-            ctx.body = json({ ...NO_PERMISSION, message: '请先登录！' });
+            ctx.body = { ...NO_PERMISSION, message: '请先登录！' };
             return;
         }
 
         const body = ctx.request.body;
-        const { orderId } = body;
+        const { sellerOrderId } = body;
 
-        const result = await ctx.service.order.cancelOrder(ctx.accountId, orderId);
-        ctx.body = json(result);
+        const result = await ctx.service.order.cancelOrder(ctx.accountId, sellerOrderId);
+        ctx.body = result;
+    }
+
+    async simulatePay() {
+        const { ctx } = this;
+        const payloadRule = {
+            tradeCode: { type: 'string', required: true },
+        };
+        ctx.validate(payloadRule);
+
+        const body = ctx.request.body;
+        const { tradeCode } = body;
+
+        const result = await ctx.service.order.simulatePay(tradeCode);
+        ctx.body = result;
     }
 }
 

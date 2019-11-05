@@ -51,9 +51,9 @@ exports.cors = {
     allowMethods: 'GET,HEAD,PUT,POST,DELETE,PATCH,OPTIONS',
 };
 
-exports.middleware = ['gzip'];
+// exports.middleware = ['gzip'];
 
-exports.snauth = {
+exports.auth = {
     registry: {
         port: 3006
     },

@@ -120,6 +120,9 @@ module.exports = [
         url: '/order/getOrderById',
         apps: [3]
     }, {
+        url: '/order/getSellerOrderById',
+        apps: [3]
+    }, {
         url: '/order/getOrderBySkus',
         apps: [3]
     }, {

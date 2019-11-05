@@ -71,6 +71,8 @@ module.exports = app => {
     router.post('/order/getOrderBySkus', controller.order.getOrderBySkus);
     router.post('/order/listOrder', controller.order.listOrder);
     router.post('/order/getOrderById', controller.order.getOrderById);
+    router.post('/order/getSellerOrderById', controller.order.getSellerOrderById);
     router.post('/order/createOrder', controller.order.createOrder);
     router.post('/order/cancelOrder', controller.order.cancelOrder);
+    router.post('/order/simulatePay', controller.order.simulatePay);
 };

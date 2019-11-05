@@ -1,5 +1,4 @@
 const { Controller } = require("egg");
-const { json } = require("../core/response");
 
 class BrandController extends Controller {
     async queryBrands() {
@@ -40,7 +39,7 @@ class BrandController extends Controller {
             pageIndex,
             pageSize
         });
-        ctx.body = json(result);
+        ctx.body = result;
     }
 
     async getBrandById() {

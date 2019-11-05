@@ -15,8 +15,13 @@ class ProductController extends Controller {
         };
         ctx.validate(payloadRule);
 
-        const res = await ctx.service.product.getSpusByIds(ctx.request.body.spuIds);
-        ctx.body = res;
+        const { spuIds } = ctx.request.body;
+        if (!spuIds.length) {
+            ctx.body = { success: true, data: [] };
+        } else {
+            const res = await ctx.service.product.getSpusByIds(spuIds);
+            ctx.body = res;
+        }
     }
 
     async listSpu() {
