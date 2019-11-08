@@ -38,6 +38,10 @@ module.exports = app => {
     router.post('/formula/add', controller.formula.addFormula);
     router.post('/formula/update', controller.formula.updateFormula);
 
+    // 订单管理
+    router.post('/admin/order/queryOrders', controller.admin.order.queryOrders);
+    router.post('/admin/order/getSellerOrderById', controller.admin.order.getSellerOrderById);
+    router.post('/admin/order/batchSendOut', controller.admin.order.batchSendOut);
 
     /** ********************************************************************
      * 公共接口
