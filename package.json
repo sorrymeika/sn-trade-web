@@ -29,6 +29,7 @@
   "scripts": {
     "dev": "node scripts/dev.js && egg-bin dev --port 7003",
     "start": "egg-scripts start --port=7003 --daemon --title=egg-sn-trade-web",
+    "debug": "egg-scripts start --port=7003 --title=egg-sn-trade-web",
     "stop": "egg-scripts stop --title=egg-sn-trade-web",
     "test": "echo \"Error: no test specified\" && exit 1"
   }
