@@ -10,7 +10,7 @@ exports.mysql = {
             // 用户名
             user: 'dev',
             // 密码
-            password: '12345Qwert',
+            password: '12345Qwert_',
             // 数据库名
             database: 'sn_trade',
         },
@@ -22,7 +22,7 @@ exports.mysql = {
             // 用户名
             user: 'dev',
             // 密码
-            password: '12345Qwert',
+            password: '12345Qwert_',
             // 数据库名
             database: 'sn_stock',
         },
@@ -44,7 +44,7 @@ exports.logger = {
 };
 
 exports.security = {
-    domainWhiteList: ['http://localhost:10020', 'http://localhost:10022'],
+    domainWhiteList: ['http://www.big1024.com', 'http://admin.big1024.com'],
     csrf: {
         enable: false
     }

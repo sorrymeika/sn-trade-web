@@ -56,9 +56,7 @@ class BrandController extends Controller {
             id
         } = body;
 
-        const result = await ctx.service.brand.getBrandById({
-            id
-        });
+        const result = await ctx.service.brand.getBrandById(id);
         ctx.body = result;
     }
 

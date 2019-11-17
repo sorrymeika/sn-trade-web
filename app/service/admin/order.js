@@ -98,7 +98,7 @@ class OrderService extends Service {
             }
         });
 
-        const { data: sellers } = await this.ctx.sellerRPC.invoke('seller.listSellerByIds', [sellerIds]);
+        const { data: sellers } = await this.app.sellerRPC.invoke('seller.listSellerByIds', [sellerIds]);
         orderRows.forEach(current => {
             const seller = sellers.find(row => row.id == current.sellerId);
             if (seller) {
@@ -127,7 +127,7 @@ class OrderService extends Service {
         await this._completeSellerOrders(sellerOrderRows);
 
         const orderInfo = sellerOrderRows[0];
-        const addressInfo = await this.ctx.tradeRPC.invoke('order.getOrderAddress', [orderInfo.tradeId]);
+        const addressInfo = await this.app.tradeRPC.invoke('order.getOrderAddress', [orderInfo.tradeId]);
 
         return {
             success: true,
@@ -160,7 +160,7 @@ class OrderService extends Service {
 
         return Promise.all([
             // 获取商户信息
-            this.ctx.sellerRPC.invoke('seller.listSellerByIds', [sellerIds])
+            this.app.sellerRPC.invoke('seller.listSellerByIds', [sellerIds])
                 .then(sellersRes => {
                     if (sellersRes.success) {
                         sellerOrderRows.forEach(current => {
@@ -188,7 +188,7 @@ class OrderService extends Service {
                         return ids;
                     }, []);
 
-                    return this.ctx.productRPC.invoke('product.getBuySkusByIds', [skuIds])
+                    return this.app.productRPC.invoke('product.getBuySkusByIds', [skuIds])
                         .then(sourceSkus => {
                             if (sourceSkus.success) {
                                 skus.forEach(sku => {

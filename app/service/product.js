@@ -3,11 +3,11 @@ const { Service } = require("egg");
 class ProductService extends Service {
     // 后台接口
     listSpuTypes() {
-        return this.ctx.productRPC.invoke('product.listSpuTypes');
+        return this.app.productRPC.invoke('product.listSpuTypes');
     }
 
     getSpusByIds(spuIds) {
-        return this.ctx.productRPC.invoke('product.getSpusByIds', [spuIds]);
+        return this.app.productRPC.invoke('product.getSpusByIds', [spuIds]);
     }
 
     listSpu({
@@ -24,7 +24,7 @@ class ProductService extends Service {
         pageIndex,
         pageSize
     }) {
-        return this.ctx.productRPC.invoke('product.listSpu', [{
+        return this.app.productRPC.invoke('product.listSpu', [{
             spuId,
             title,
             status,
@@ -41,7 +41,7 @@ class ProductService extends Service {
     }
 
     getSpuById(id) {
-        return this.ctx.productRPC.invoke('product.getSpuById', [id]);
+        return this.app.productRPC.invoke('product.getSpuById', [id]);
     }
 
     addSpu({
@@ -68,7 +68,7 @@ class ProductService extends Service {
         skuPropKey3,
         skuPropKey4
     }) {
-        return this.ctx.productRPC.invoke('product.addSpu', [{
+        return this.app.productRPC.invoke('product.addSpu', [{
             title,
             cateId,
             subCateId,
@@ -117,7 +117,7 @@ class ProductService extends Service {
         detailVideo,
         content
     }) {
-        return this.ctx.productRPC.invoke('product.updateSpu', [{
+        return this.app.productRPC.invoke('product.updateSpu', [{
             id,
             title,
             sellerId,
@@ -143,21 +143,21 @@ class ProductService extends Service {
     }
 
     addSku({ spuId, code, price, kgWeight, picture, stockType, stock, skuPropVal0, skuPropVal1, skuPropVal2, skuPropVal3, skuPropVal4 }) {
-        return this.ctx.productRPC.invoke('product.addSku', [{ spuId, code, price, kgWeight, picture, stockType, stock, skuPropVal0, skuPropVal1, skuPropVal2, skuPropVal3, skuPropVal4 }]);
+        return this.app.productRPC.invoke('product.addSku', [{ spuId, code, price, kgWeight, picture, stockType, stock, skuPropVal0, skuPropVal1, skuPropVal2, skuPropVal3, skuPropVal4 }]);
     }
 
     updateSku({ id, price, kgWeight, picture, stockType, stock, skuPropVal0, skuPropVal1, skuPropVal2, skuPropVal3, skuPropVal4 }) {
-        return this.ctx.productRPC.invoke('product.updateSku', [{ id, price, kgWeight, picture, stockType, stock, skuPropVal0, skuPropVal1, skuPropVal2, skuPropVal3, skuPropVal4 }]);
+        return this.app.productRPC.invoke('product.updateSku', [{ id, price, kgWeight, picture, stockType, stock, skuPropVal0, skuPropVal1, skuPropVal2, skuPropVal3, skuPropVal4 }]);
     }
 
     // 前台接口
     getProductById(id) {
         return Promise.all([
-            this.ctx.productRPC.invoke('product.getBasicById', [id])
+            this.app.productRPC.invoke('product.getBasicById', [id])
                 .then((res) => {
                     return Promise.all([
-                        this.ctx.sellerRPC.invoke('seller.getSellerInfoById', [res.data.sellerId]),
-                        this.ctx.productRPC.invoke('category.listSpuPropDefinitionsWithColumns', [res.data.subSubCateId])
+                        this.app.sellerRPC.invoke('seller.getSellerInfoById', [res.data.sellerId]),
+                        this.app.productRPC.invoke('category.listSpuPropDefinitionsWithColumns', [res.data.subSubCateId])
                     ])
                         .then(([seller, spuPropDefinitions]) => {
                             res.seller = seller.data;
@@ -165,7 +165,7 @@ class ProductService extends Service {
                             return res;
                         });
                 }),
-            this.ctx.productRPC.invoke('product.listAllSkusBySpuId', [id]),
+            this.app.productRPC.invoke('product.listAllSkusBySpuId', [id]),
         ])
             .then(([basic, skus]) => {
                 let minPrice = skus.data[0].price;
@@ -206,11 +206,11 @@ class ProductService extends Service {
     }
 
     getDetailById(id) {
-        return this.ctx.productRPC.invoke('product.getDetailById', [id]);
+        return this.app.productRPC.invoke('product.getDetailById', [id]);
     }
 
     listAllSkusBySpuId(spuId) {
-        return this.ctx.productRPC.invoke('product.listAllSkusBySpuId', [spuId]);
+        return this.app.productRPC.invoke('product.listAllSkusBySpuId', [spuId]);
     }
 }
 

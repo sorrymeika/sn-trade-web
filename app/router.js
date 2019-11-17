@@ -43,6 +43,12 @@ module.exports = app => {
     router.post('/admin/order/getSellerOrderById', controller.admin.order.getSellerOrderById);
     router.post('/admin/order/batchSendOut', controller.admin.order.batchSendOut);
 
+    // 仓库管理
+    router.post('/admin/warehouse/queryWarehouses', controller.admin.warehouse.queryWarehouses);
+    router.post('/admin/warehouse/add', controller.admin.warehouse.addWarehouse);
+    router.post('/admin/warehouse/getById', controller.admin.warehouse.getWarehouseById);
+    router.post('/admin/warehouse/update', controller.admin.warehouse.updateWarehouse);
+
     /** ********************************************************************
      * 公共接口
      ** ********************************************************************/

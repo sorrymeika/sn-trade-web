@@ -74,12 +74,20 @@ module.exports = [
         permissionIds: []
     },
 
+
     {
         url: '/formula/update',
         apps: [1, 2],
         permissionIds: []
     }, {
         url: '/formula/add',
+        apps: [1, 2],
+        permissionIds: []
+    },
+
+    // 仓库
+    {
+        url: '/admin/warehouse/queryWarehouses',
         apps: [1, 2],
         permissionIds: []
     },

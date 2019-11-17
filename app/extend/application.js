@@ -24,6 +24,14 @@ const tradeRPC = registerConsumer({
     }
 });
 
+const baseRPC = registerConsumer({
+    // 服务提供者名称
+    providerName: 'base',
+    registry: {
+        port: 3006
+    }
+});
+
 module.exports = {
     get productRPC() {
         return productRPC;
@@ -35,5 +43,9 @@ module.exports = {
 
     get tradeRPC() {
         return tradeRPC;
+    },
+
+    get baseRPC() {
+        return baseRPC;
     },
 };
