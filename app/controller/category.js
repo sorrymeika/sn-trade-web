@@ -83,8 +83,8 @@ class CategoryController extends Controller {
 
         const payloadRule = {
             categoryId: { type: 'number', required: true },
-            type: { type: 'number', required: true },
-            inputType: { type: 'number', required: true },
+            type: { type: 'string', required: true },
+            inputType: { type: 'string', required: true },
             label: { type: 'string', required: true },
             field: { type: 'string', required: true },
             rules: { type: 'string', required: false },
@@ -102,8 +102,8 @@ class CategoryController extends Controller {
 
         const payloadRule = {
             id: { type: 'number', required: true },
-            type: { type: 'number', required: true },
-            inputType: { type: 'number', required: true },
+            type: { type: 'string', required: true },
+            inputType: { type: 'string', required: true },
             label: { type: 'string', required: true },
             field: { type: 'string', required: true },
             rules: { type: 'string', required: false },
