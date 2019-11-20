@@ -26,18 +26,6 @@ class ProductController extends Controller {
     getSpusByIds(spuIds) {
         return this.app.productRPC.invoke('product.getSpusByIds', [spuIds]);
     }
-
-    async getSkusBySpuId() {
-        const { ctx } = this;
-
-        const payloadRule = {
-            spuId: { type: 'number', required: true },
-        };
-        ctx.validate(payloadRule);
-
-        const res = await ctx.service.product.getSkusBySpuId(ctx.request.body.spuId);
-        ctx.body = res;
-    }
 }
 
 module.exports = ProductController;

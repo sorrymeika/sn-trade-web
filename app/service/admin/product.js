@@ -157,6 +157,10 @@ class ProductService extends Service {
         return this.app.productRPC.invoke('product.pullSpuFromShelves', [spuId]);
     }
 
+    getSkusBySpuId(spuId) {
+        return this.app.productRPC.invoke('product.getSkusBySpuId', [spuId]);
+    }
+
     /**
      * 添加SKU
      * @param {*} sku SKU信息

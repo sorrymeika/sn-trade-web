@@ -66,10 +66,6 @@ class ProductService extends Service {
     getSpusByIds(spuIds) {
         return this.app.productRPC.invoke('product.getSpusByIds', [spuIds]);
     }
-
-    getSkusBySpuId(spuId) {
-        return this.app.productRPC.invoke('product.getSkusBySpuId', [spuId]);
-    }
 }
 
 module.exports = ProductService;
