@@ -1,173 +1,12 @@
 const { Service } = require("egg");
 
 class ProductService extends Service {
-    // 后台接口
-    listSpuTypes() {
-        return this.app.productRPC.invoke('product.listSpuTypes');
-    }
-
-    getSpusByIds(spuIds) {
-        return this.app.productRPC.invoke('product.getSpusByIds', [spuIds]);
-    }
-
-    listSpu({
-        spuId,
-        title,
-        status,
-        type,
-        subType,
-        cateId,
-        subCateId,
-        subSubCateId,
-        approvalStatus,
-        brandId,
-        pageIndex,
-        pageSize
-    }) {
-        return this.app.productRPC.invoke('product.listSpu', [{
-            spuId,
-            title,
-            status,
-            type,
-            subType,
-            cateId,
-            subCateId,
-            subSubCateId,
-            approvalStatus,
-            brandId,
-            pageIndex,
-            pageSize
-        }]);
-    }
-
-    getSpuById(id) {
-        return this.app.productRPC.invoke('product.getSpuById', [id]);
-    }
-
-    addSpu({
-        title,
-        cateId,
-        subCateId,
-        subSubCateId,
-        type,
-        subType,
-        sellerId,
-        creator,
-        subtitle,
-        brandId,
-        barcode,
-        company,
-        pictures,
-        video,
-        specOnTitle,
-        minBuyNum,
-        maxBuyNum,
-        skuPropKey0,
-        skuPropKey1,
-        skuPropKey2,
-        skuPropKey3,
-        skuPropKey4
-    }) {
-        return this.app.productRPC.invoke('product.addSpu', [{
-            title,
-            cateId,
-            subCateId,
-            subSubCateId,
-            type,
-            subType,
-            sellerId,
-            creator,
-            subtitle,
-            brandId,
-            barcode,
-            company,
-            pictures,
-            video,
-            specOnTitle,
-            minBuyNum,
-            maxBuyNum,
-            skuPropKey0,
-            skuPropKey1,
-            skuPropKey2,
-            skuPropKey3,
-            skuPropKey4
-        }]);
-    }
-
-    updateSpu({
-        id,
-        title,
-        sellerId,
-        modifyer,
-        subtitle,
-        brandId,
-        barcode,
-        company,
-        pictures,
-        video,
-        specOnTitle,
-        minBuyNum,
-        maxBuyNum,
-        skuPropKey0,
-        skuPropKey1,
-        skuPropKey2,
-        skuPropKey3,
-        skuPropKey4,
-        props,
-        detailVideo,
-        content
-    }) {
-        return this.app.productRPC.invoke('product.updateSpu', [{
-            id,
-            title,
-            sellerId,
-            modifyer,
-            subtitle,
-            brandId,
-            barcode,
-            company,
-            pictures,
-            video,
-            specOnTitle,
-            minBuyNum,
-            maxBuyNum,
-            skuPropKey0,
-            skuPropKey1,
-            skuPropKey2,
-            skuPropKey3,
-            skuPropKey4,
-            props,
-            detailVideo,
-            content
-        }]);
-    }
-
-    addSku({ spuId, code, price, kgWeight, picture, stockType, stock, skuPropVal0, skuPropVal1, skuPropVal2, skuPropVal3, skuPropVal4 }) {
-        return this.app.productRPC.invoke('product.addSku', [{ spuId, code, price, kgWeight, picture, stockType, stock, skuPropVal0, skuPropVal1, skuPropVal2, skuPropVal3, skuPropVal4 }]);
-    }
-
-    updateSku({ id, price, kgWeight, picture, stockType, stock, skuPropVal0, skuPropVal1, skuPropVal2, skuPropVal3, skuPropVal4 }) {
-        return this.app.productRPC.invoke('product.updateSku', [{ id, price, kgWeight, picture, stockType, stock, skuPropVal0, skuPropVal1, skuPropVal2, skuPropVal3, skuPropVal4 }]);
-    }
-
-    // 前台接口
     getProductById(id) {
         return Promise.all([
-            this.app.productRPC.invoke('product.getBasicById', [id])
-                .then((res) => {
-                    return Promise.all([
-                        this.app.sellerRPC.invoke('seller.getSellerInfoById', [res.data.sellerId]),
-                        this.app.productRPC.invoke('category.listSpuPropDefinitionsWithColumns', [res.data.subSubCateId])
-                    ])
-                        .then(([seller, spuPropDefinitions]) => {
-                            res.seller = seller.data;
-                            res.spuPropDefinitions = spuPropDefinitions.data;
-                            return res;
-                        });
-                }),
-            this.app.productRPC.invoke('product.listAllSkusBySpuId', [id]),
+            this._getBasicInfoById(id),
+            this.app.productRPC.invoke('product.getSkusBySpuId', [id]),
         ])
-            .then(([basic, skus]) => {
+            .then(([basicInfo, skus]) => {
                 let minPrice = skus.data[0].price;
                 let maxPrice = skus.data[0].price;
 
@@ -181,20 +20,20 @@ class ProductService extends Service {
                     }
                 }
 
-                const spuProps = basic.data.props ? JSON.parse(basic.data.props) : {};
+                const spuProps = basicInfo.data.props ? JSON.parse(basicInfo.data.props) : {};
 
                 return {
                     success: true,
                     code: 0,
                     data: {
-                        item: Object.assign(basic.data, {
+                        item: Object.assign(basicInfo.data, {
                             price: minPrice,
                             minPrice,
                             maxPrice,
                         }),
-                        seller: basic.seller,
-                        spuProps: basic.spuPropDefinitions
-                            ? basic.spuPropDefinitions.map((prop) => ({
+                        seller: basicInfo.seller,
+                        spuProps: basicInfo.spuPropDefinitions
+                            ? basicInfo.spuPropDefinitions.map((prop) => ({
                                 ...prop,
                                 value: spuProps[prop.field]
                             }))
@@ -205,12 +44,31 @@ class ProductService extends Service {
             });
     }
 
+    _getBasicInfoById(id) {
+        return this.app.productRPC.invoke('product.getBasicInfoById', [id])
+            .then((res) => {
+                return Promise.all([
+                    this.app.sellerRPC.invoke('seller.getSellerInfoById', [res.data.sellerId]),
+                    this.app.productRPC.invoke('category.getSpuPropDefinitions', [res.data.subSubCateId, 'least'])
+                ])
+                    .then(([seller, spuPropDefinitions]) => {
+                        res.seller = seller.data;
+                        res.spuPropDefinitions = spuPropDefinitions.data;
+                        return res;
+                    });
+            });
+    }
+
     getDetailById(id) {
         return this.app.productRPC.invoke('product.getDetailById', [id]);
     }
 
-    listAllSkusBySpuId(spuId) {
-        return this.app.productRPC.invoke('product.listAllSkusBySpuId', [spuId]);
+    getSpusByIds(spuIds) {
+        return this.app.productRPC.invoke('product.getSpusByIds', [spuIds]);
+    }
+
+    getSkusBySpuId(spuId) {
+        return this.app.productRPC.invoke('product.getSkusBySpuId', [spuId]);
     }
 }
 

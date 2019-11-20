@@ -13,7 +13,7 @@ class CategoryController extends Controller {
             pid
         } = ctx.request.body;
 
-        const result = await ctx.service.category.listCateByPid(pid);
+        const result = await ctx.service.admin.category.listCateByPid(pid);
         ctx.body = result;
     }
 
@@ -33,7 +33,7 @@ class CategoryController extends Controller {
             pid
         } = ctx.request.body;
 
-        const result = await ctx.service.category.addCate({
+        const result = await ctx.service.admin.category.addCate({
             name,
             level,
             pid
@@ -55,14 +55,14 @@ class CategoryController extends Controller {
             id
         } = ctx.request.body;
 
-        const result = await ctx.service.category.updateCate({
+        const result = await ctx.service.admin.category.updateCate({
             name,
             id
         });
         ctx.body = result;
     }
 
-    async listSpuPropDefinitions() {
+    async getSpuPropDefinitions() {
         const { ctx } = this;
 
         const payloadRule = {
@@ -74,7 +74,7 @@ class CategoryController extends Controller {
             categoryId
         } = ctx.request.body;
 
-        const result = await ctx.service.category.listSpuPropDefinitions(categoryId);
+        const result = await ctx.service.admin.category.getSpuPropDefinitions(categoryId);
         ctx.body = result;
     }
 
@@ -93,7 +93,7 @@ class CategoryController extends Controller {
         };
         ctx.validate(payloadRule);
 
-        const result = await ctx.service.category.addSpuPropDefinition(ctx.request.body);
+        const result = await ctx.service.admin.category.addSpuPropDefinition(ctx.request.body);
         ctx.body = result;
     }
 
@@ -112,7 +112,7 @@ class CategoryController extends Controller {
         };
         ctx.validate(payloadRule);
 
-        const result = await ctx.service.category.updateSpuPropDefinition(ctx.request.body);
+        const result = await ctx.service.admin.category.updateSpuPropDefinition(ctx.request.body);
         ctx.body = result;
     }
 }

@@ -39,41 +39,48 @@ module.exports = [
     },
 
     {
-        url: '/product/listSpuTypes',
+        url: '/admin/product/listSpuTypes',
         apps: [1, 2],
         permissionIds: []
     }, {
-        url: '/product/listSpu',
+        url: '/admin/product/listSpu',
         apps: [1, 2],
         permissionIds: []
     }, {
-        url: '/product/getSpuById',
+        url: '/admin/product/getSpuById',
         apps: [1, 2],
         permissionIds: []
     }, {
-        url: '/product/addSpu',
+        url: '/admin/product/addSpu',
         apps: [1, 2],
         permissionIds: []
     }, {
-        url: '/product/updateSpu',
+        url: '/admin/product/updateSpu',
+        apps: [1, 2],
+        permissionIds: []
+    }, {
+        url: '/admin/product/shelveSpu',
+        apps: [1, 2],
+        permissionIds: []
+    }, {
+        url: '/admin/product/pullSpuFromShelves',
         apps: [1, 2],
         permissionIds: []
     },
 
     {
-        url: '/product/listAllSkusBySpuId',
+        url: '/admin/product/getSkusBySpuId',
         apps: [1, 2],
         permissionIds: []
     }, {
-        url: '/product/addSku',
+        url: '/admin/product/addSku',
         apps: [1, 2],
         permissionIds: []
     }, {
-        url: '/product/updateSku',
+        url: '/admin/product/updateSku',
         apps: [1, 2],
         permissionIds: []
     },
-
 
     {
         url: '/formula/update',

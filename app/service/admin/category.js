@@ -13,8 +13,8 @@ class CategoryService extends Service {
         return this.app.productRPC.invoke('category.updateCate', [{ name, id, modifyer }]);
     }
 
-    listSpuPropDefinitions(categoryId) {
-        return this.app.productRPC.invoke('category.listSpuPropDefinitions', [categoryId]);
+    getSpuPropDefinitions(categoryId) {
+        return this.app.productRPC.invoke('category.getSpuPropDefinitions', [categoryId, 'all']);
     }
 
     addSpuPropDefinition({ categoryId, type, inputType, label, field, rules, inputProps, options }) {

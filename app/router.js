@@ -9,13 +9,13 @@ module.exports = app => {
      ** ********************************************************************/
 
     // 系统类目
-    router.post('/category/listCateByPid', controller.category.listCateByPid);
-    router.post('/category/add', controller.category.addCate);
-    router.post('/category/update', controller.category.updateCate);
+    router.post('/admin/category/listCateByPid', controller.admin.category.listCateByPid);
+    router.post('/admin/category/add', controller.admin.category.addCate);
+    router.post('/admin/category/update', controller.admin.category.updateCate);
 
-    router.post('/category/listSpuPropDefinitions', controller.category.listSpuPropDefinitions);
-    router.post('/category/addSpuPropDefinition', controller.category.addSpuPropDefinition);
-    router.post('/category/updateSpuPropDefinition', controller.category.updateSpuPropDefinition);
+    router.post('/admin/category/getSpuPropDefinitions', controller.admin.category.getSpuPropDefinitions);
+    router.post('/admin/category/addSpuPropDefinition', controller.admin.category.addSpuPropDefinition);
+    router.post('/admin/category/updateSpuPropDefinition', controller.admin.category.updateSpuPropDefinition);
 
     // 品牌
     router.post('/brand/query', controller.brand.queryBrands);
@@ -24,16 +24,22 @@ module.exports = app => {
     router.post('/brand/update', controller.brand.updateBrand);
 
     // 商品
-    router.post('/product/listSpuTypes', controller.product.listSpuTypes);
-    router.post('/product/getSpusByIds', controller.product.getSpusByIds);
-    router.post('/product/listSpu', controller.product.listSpu);
+    router.post('/admin/product/listSpuTypes', controller.admin.product.listSpuTypes);
+    router.post('/admin/product/listSpu', controller.admin.product.listSpu);
+    router.post('/admin/product/getSpusByIds', controller.product.getSpusByIds);
+    router.post('/admin/product/getSpuById', controller.admin.product.getSpuById);
 
-    router.post('/product/getSpuById', controller.product.getSpuById);
-    router.post('/product/addSpu', controller.product.addSpu);
-    router.post('/product/updateSpu', controller.product.updateSpu);
+    router.post('/admin/product/addSpu', controller.admin.product.addSpu);
+    router.post('/admin/product/updateSpu', controller.admin.product.updateSpu);
+    router.post('/admin/product/shelveSpu', controller.admin.product.shelveSpu);
+    router.post('/admin/product/pullSpuFromShelves', controller.admin.product.pullSpuFromShelves);
 
-    router.post('/product/addSku', controller.product.addSku);
-    router.post('/product/updateSku', controller.product.updateSku);
+    router.post('/admin/product/getSkusBySpuId', controller.admin.product.getSkusBySpuId);
+    router.post('/admin/product/addSku', controller.admin.product.addSku);
+    router.post('/admin/product/updateSku', controller.admin.product.updateSku);
+    router.post('/admin/product/shelveSku', controller.admin.product.shelveSku);
+    router.post('/admin/product/pullSkuFromShelves', controller.admin.product.pullSkuFromShelves);
+
 
     // 选品规则
     router.post('/formula/list', controller.formula.listFormula);
@@ -56,9 +62,6 @@ module.exports = app => {
      * 公共接口
      ** ********************************************************************/
 
-    // 商品
-    router.post('/product/listAllSkusBySpuId', controller.product.listAllSkusBySpuId);
-
     // 搜索
     router.post('/search/searchByFormula', controller.search.searchByFormula);
 
@@ -70,6 +73,8 @@ module.exports = app => {
     // 商品
     router.post('/product/getProductById', controller.product.getProductById);
     router.post('/product/getDetailById', controller.product.getDetailById);
+    router.post('/product/getSpusByIds', controller.product.getSpusByIds);
+
 
     // 购物车
     router.post('/cart/countCartTotalNum', controller.cart.countCartTotalNum);
