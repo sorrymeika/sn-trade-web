@@ -17,6 +17,13 @@ module.exports = app => {
     router.post('/admin/category/addSpuPropDefinition', controller.admin.category.addSpuPropDefinition);
     router.post('/admin/category/updateSpuPropDefinition', controller.admin.category.updateSpuPropDefinition);
 
+    // 前台类目
+    router.post('/admin/fdCategory/getLevel1Cates', controller.admin.fdCategory.getLevel1Cates);
+    router.post('/admin/fdCategory/getSubCatesTreeByPid', controller.admin.fdCategory.getSubCatesTreeByPid);
+    router.post('/admin/fdCategory/add', controller.admin.fdCategory.add);
+    router.post('/admin/fdCategory/update', controller.admin.fdCategory.update);
+    router.post('/admin/fdCategory/deleteById', controller.admin.fdCategory.deleteById);
+
     // 品牌
     router.post('/brand/query', controller.brand.queryBrands);
     router.post('/brand/getById', controller.brand.getBrandById);
@@ -64,6 +71,7 @@ module.exports = app => {
 
     // 搜索
     router.post('/search/searchByFormula', controller.search.searchByFormula);
+    router.post('/search/searchByConditions', controller.search.searchByConditions);
 
 
     /** ********************************************************************
@@ -75,6 +83,8 @@ module.exports = app => {
     router.post('/product/getDetailById', controller.product.getDetailById);
     router.post('/product/getSpusByIds', controller.product.getSpusByIds);
 
+    router.post('/fdCategory/getCates', controller.fdCategory.getCates);
+    router.post('/fdCategory/getSubCatesTreeByPid', controller.fdCategory.getSubCatesTreeByPid);
 
     // 购物车
     router.post('/cart/countCartTotalNum', controller.cart.countCartTotalNum);

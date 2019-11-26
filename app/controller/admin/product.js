@@ -202,11 +202,11 @@ class ProductController extends Controller {
     async shelveSku() {
         const { ctx } = this;
         const payloadRule = {
-            spuId: { type: 'number', required: true },
+            skuId: { type: 'number', required: true },
         };
         ctx.validate(payloadRule);
 
-        const res = await ctx.service.admin.product.shelveSku(ctx.request.body.spuId);
+        const res = await ctx.service.admin.product.shelveSku(ctx.request.body.skuId);
         ctx.body = res;
     }
 
