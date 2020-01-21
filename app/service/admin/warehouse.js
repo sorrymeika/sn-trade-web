@@ -52,7 +52,18 @@ class WarehouseService extends Service {
         return { success: true, data: rows };
     }
 
-    getWarehouseById(id) {
+    async getMyWarehouses() {
+        const mySellers = await this.ctx.getMySellers();
+        if (!mySellers.success) {
+            return mySellers;
+        }
+        if (!mySellers.data.length) {
+            return { success: true, code: 0, data: [] };
+        }
+
+        const conn = await this.app.mysql.get('stock');
+        const rows = await conn.query(`select id,sellerId,name,provinceCode,cityCode,districtCode,address from warehouse where sellerId in (${mySellers.data.map(seller => seller.id).join(',')})`);
+        return { success: true, code: 0, data: rows };
     }
 
     async addWarehouse({

@@ -212,18 +212,43 @@ class OrderService extends Service {
         ]);
     }
 
-    async batchSendOut(sellerOrderIds) {
-        if (!Array.isArray(sellerOrderIds) || !sellerOrderIds.length || !sellerOrderIds.every(id => typeof id === 'number')) {
+    /**
+     * 批量发货
+     * @param {object[]} sellerOrders 商户订单列表
+     * @param {number} sellerOrders[].id 仓库类型
+     * @param {number} sellerOrders[].warehouseType 仓库类型
+     * @param {number} sellerOrders[].warehouseId 仓库ID
+     * @param {string} sellerOrders[].remarks 备注
+     */
+    async batchSendOut(sellerOrders) {
+        if (!Array.isArray(sellerOrders) || !sellerOrders.length || !sellerOrders.every(({ id, warehouseType, warehouseId }) => typeof id === 'number' && typeof warehouseType == 'number' && typeof warehouseId == 'number')) {
             return PARAM_ERROR;
         }
 
+        const sellerOrderIds = sellerOrders.map(sellerOrder => sellerOrder.id);
         const conn = this.app.mysql.get('trade');
         const sellerOrderRows = await conn.query(
-            `select id,status,payStatus from sellerOrder where id IN (?)`, [sellerOrderIds]
+            `select id,status,sellerId,payStatus from sellerOrder where id IN (?)`, [sellerOrderIds]
         );
+
+        for (let i = 0; i < sellerOrderRows.length; i++) {
+            const isMySeller = await this.ctx.isMySeller(sellerOrderRows[i].sellerId);
+            if (!isMySeller.success) {
+                return isMySeller;
+            }
+        }
 
         if (!sellerOrderRows.every(row => row.status == 1)) {
             return ORDER_STATUS_ERROR;
+        }
+
+        for (let i = 0; i < sellerOrderRows.length; i++) {
+            const { sellerId, id } = sellerOrderRows[i];
+            const { warehouseType, warehouseId } = sellerOrders.find(sellerOrder => sellerOrder.id === id);
+            const stockRes = await this.app.stockRPC.invoke('stock.sendOut', [sellerId, id, warehouseType, warehouseId]);
+            if (!stockRes.success) {
+                return stockRes;
+            }
         }
 
         return await conn.beginTransactionScope(async (conn) => {

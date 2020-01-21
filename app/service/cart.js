@@ -28,6 +28,16 @@ class CartService extends Service {
     updateAllSelected(accountId, selected) {
         return this.app.tradeRPC.invoke('cart.updateAllSelected', [accountId, selected]);
     }
+
+    async delByCartIds(accountId, cartIds) {
+        if (!Array.isArray(cartIds) || cartIds.length == 0 || cartIds.some(id => typeof id !== 'number')) {
+            return { success: false, code: -140, message: '请传入正确的购物车ID列表' };
+        }
+
+        const res = await this.app.mysql.get('trade')
+            .query(`delete from cart where userId=? and id in (?)`, [accountId, cartIds]);
+        return { success: true, code: 0, data: res };
+    }
 }
 
 module.exports = CartService;

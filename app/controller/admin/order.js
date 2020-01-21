@@ -30,12 +30,22 @@ class OrderController extends Controller {
     async batchSendOut() {
         const { ctx } = this;
         const payloadRule = {
-            sellerOrderIds: { type: 'array', itemType: 'number', required: true },
+            sellerOrders: {
+                type: 'array',
+                itemType: 'object',
+                rule: {
+                    id: { type: 'number', required: true },
+                    warehouseType: { type: 'number', required: true },
+                    warehouseId: { type: 'number', required: true },
+                    remarks: { type: 'string', required: false },
+                },
+                required: true
+            },
         };
         ctx.validate(payloadRule);
 
-        const { sellerOrderIds } = ctx.request.body;
-        const result = await ctx.service.admin.order.batchSendOut(sellerOrderIds);
+        const { sellerOrders } = ctx.request.body;
+        const result = await ctx.service.admin.order.batchSendOut(sellerOrders);
         ctx.body = result;
     }
 }

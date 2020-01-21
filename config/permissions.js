@@ -125,6 +125,9 @@ module.exports = [
     }, {
         url: '/cart/updateAllSelected',
         apps: [3]
+    }, {
+        url: '/cart/delByCartIds',
+        apps: [3]
     },
 
     // 订单权限

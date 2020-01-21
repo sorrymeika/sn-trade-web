@@ -49,21 +49,10 @@ class WarehouseController extends Controller {
         ctx.body = result;
     }
 
-    async getWarehouseById() {
+    async getMyWarehouses() {
         const { ctx } = this;
 
-        const payloadRule = {
-            id: { type: 'number', required: true }
-        };
-        ctx.validate(payloadRule);
-
-        const body = ctx.request.body;
-
-        const {
-            id
-        } = body;
-
-        const result = await ctx.service.admin.warehouse.getWarehouseById(id);
+        const result = await ctx.service.admin.warehouse.getMyWarehouses();
         ctx.body = result;
     }
 

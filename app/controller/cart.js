@@ -166,6 +166,33 @@ class CartController extends Controller {
             ctx.body = result;
         }
     }
+
+    async delByCartIds() {
+        const { ctx } = this;
+
+        const payloadRule = {
+            cartIds: { type: 'array', required: true, itemType: 'number' },
+        };
+        ctx.validate(payloadRule);
+
+        if (!ctx.accountId) {
+            ctx.body = { ...NO_PERMISSION, message: '请先登录！' };
+            return;
+        }
+
+        const body = ctx.request.body;
+
+        const {
+            cartIds,
+        } = body;
+
+        const result = await ctx.service.cart.delByCartIds(ctx.accountId, cartIds);
+        if (result.success) {
+            ctx.body = await ctx.service.cart.listUserCart(ctx.accountId);
+        } else {
+            ctx.body = result;
+        }
+    }
 }
 
 module.exports = CartController;

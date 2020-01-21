@@ -165,12 +165,12 @@ class ProductService extends Service {
      * 添加SKU
      * @param {*} sku SKU信息
      */
-    addSku({ spuId, code, price, kgWeight, picture, stockType, stock, skuPropVal0, skuPropVal1, skuPropVal2, skuPropVal3, skuPropVal4 }) {
-        return this.app.productRPC.invoke('product.addSku', [{ spuId, code, price, kgWeight, picture, stockType, stock, skuPropVal0, skuPropVal1, skuPropVal2, skuPropVal3, skuPropVal4 }]);
+    addSku({ spuId, code, price, kgWeight, picture, stockType, skuPropVal0, skuPropVal1, skuPropVal2, skuPropVal3, skuPropVal4 }) {
+        return this.app.productRPC.invoke('product.addSku', [{ spuId, code, price, kgWeight, picture, stockType, skuPropVal0, skuPropVal1, skuPropVal2, skuPropVal3, skuPropVal4 }]);
     }
 
-    updateSku({ id, price, kgWeight, picture, stockType, stock, skuPropVal0, skuPropVal1, skuPropVal2, skuPropVal3, skuPropVal4 }) {
-        return this.app.productRPC.invoke('product.updateSku', [{ id, price, kgWeight, picture, stockType, stock, skuPropVal0, skuPropVal1, skuPropVal2, skuPropVal3, skuPropVal4 }]);
+    updateSku({ id, price, kgWeight, picture, skuPropVal0, skuPropVal1, skuPropVal2, skuPropVal3, skuPropVal4 }) {
+        return this.app.productRPC.invoke('product.updateSku', [{ id, price, kgWeight, picture, skuPropVal0, skuPropVal1, skuPropVal2, skuPropVal3, skuPropVal4 }]);
     }
 
     /**

@@ -47,7 +47,6 @@ module.exports = app => {
     router.post('/admin/product/shelveSku', controller.admin.product.shelveSku);
     router.post('/admin/product/pullSkuFromShelves', controller.admin.product.pullSkuFromShelves);
 
-
     // 选品规则
     router.post('/formula/list', controller.formula.listFormula);
     router.post('/formula/getById', controller.formula.getFormulaById);
@@ -62,7 +61,7 @@ module.exports = app => {
     // 仓库管理
     router.post('/admin/warehouse/queryWarehouses', controller.admin.warehouse.queryWarehouses);
     router.post('/admin/warehouse/add', controller.admin.warehouse.addWarehouse);
-    router.post('/admin/warehouse/getById', controller.admin.warehouse.getWarehouseById);
+    router.post('/admin/warehouse/getMyWarehouses', controller.admin.warehouse.getMyWarehouses);
     router.post('/admin/warehouse/update', controller.admin.warehouse.updateWarehouse);
 
     /** ********************************************************************
@@ -94,6 +93,7 @@ module.exports = app => {
     router.post('/cart/updateCartSelected', controller.cart.updateCartSelected);
     router.post('/cart/updateSelectedByCartIds', controller.cart.updateSelectedByCartIds);
     router.post('/cart/updateAllSelected', controller.cart.updateAllSelected);
+    router.post('/cart/delByCartIds', controller.cart.delByCartIds);
 
     // 订单
     router.post('/order/getOrderBySkus', controller.order.getOrderBySkus);
