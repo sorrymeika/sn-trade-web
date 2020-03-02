@@ -2,7 +2,7 @@ const { Service } = require("egg");
 
 class FdCategoryService extends Service {
     async getCates(sellerId) {
-        const cateRes = await this.app.productRPC.invoke('fdCategory.getLevel1Cates', [sellerId]);
+        const cateRes = await this.app.productRPC.invoke('fdCategory.getCatesBySellerId', [sellerId]);
         if (cateRes.success && cateRes.data && cateRes.data.length) {
             const subCatesRes = await this.getSubCatesTreeByPid(cateRes.data[0].id);
             if (subCatesRes.success) {

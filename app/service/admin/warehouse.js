@@ -4,41 +4,36 @@ class WarehouseService extends Service {
     async queryWarehouses({
         id,
         sellerId,
-        sellerIds,
         keywords,
         pageIndex = 1,
         pageSize = 100
     }) {
-        let where = '1=1';
-        let params = [];
-
-        if (id) {
-            where += ' and id=?';
-            params.push(id);
-        }
+        let sellerIds;
 
         if (sellerId) {
-            where += ' and sellerId=?';
-            params.push(sellerId);
-        } else if (Array.isArray(sellerIds) && sellerIds.length) {
-            where += ' and sellerId in (?)';
-            params.push(sellerIds);
+            const isMySellerResult = await this.ctx.helper.isMySeller(sellerId);
+            if (!isMySellerResult.success) {
+                return isMySellerResult;
+            }
+        } else {
+            sellerIds = await this.ctx.helper.getMySellerIds();
         }
 
-        if (keywords) {
-            where += ' and CONCAT(name,tags,address) like ?';
-            params.push(`%keywords%`);
-        }
+        const result = await this.ctx.dao.warehouse.query({
+            id,
+            sellerId,
+            sellerIds,
+            keywords,
+            pageIndex,
+            pageSize
+        });
 
-        const conn = await this.app.mysql.get('stock');
-        const rows = await conn.query(`select id,sellerId,name,provinceCode,cityCode,districtCode,address,creator,createDt,modifyer,modifyDt from warehouse where ${where} limit ${(pageIndex - 1) * pageSize},${pageSize}`, params);
-
-        if (rows.length) {
-            const districtCodes = rows.map(row => row.districtCode);
+        if (result.data.length) {
+            const districtCodes = result.data.map(row => row.districtCode);
             const { data: areaList } = await this.app.baseRPC.invoke('address.listAreaInfoByDistrictCodes', [districtCodes]);
 
             if (areaList && areaList.length) {
-                rows.forEach((row) => {
+                result.data.forEach((row) => {
                     const area = areaList.find(area => area.districtCode == row.districtCode);
                     if (area) {
                         row.provinceName = area.provinceName;
@@ -49,75 +44,26 @@ class WarehouseService extends Service {
             }
         }
 
-        return { success: true, data: rows };
+        return { success: true, data: result.data, total: result.total };
     }
 
     async getMyWarehouses() {
-        const mySellers = await this.ctx.getMySellers();
-        if (!mySellers.success) {
-            return mySellers;
-        }
-        if (!mySellers.data.length) {
+        const sellerIds = await this.ctx.helper.getMySellerIds();
+        if (!sellerIds.length) {
             return { success: true, code: 0, data: [] };
         }
-
-        const conn = await this.app.mysql.get('stock');
-        const rows = await conn.query(`select id,sellerId,name,provinceCode,cityCode,districtCode,address from warehouse where sellerId in (${mySellers.data.map(seller => seller.id).join(',')})`);
+        const rows = await this.ctx.dao.warehouse.getWarehousesBySellerId(sellerIds);
         return { success: true, code: 0, data: rows };
     }
 
-    async addWarehouse({
-        sellerId,
-        name,
-        tags,
-        provinceCode,
-        cityCode,
-        districtCode,
-        address,
-        creator,
-    }) {
-        const conn = await this.app.mysql.get('stock');
-        const res = await conn.insert('warehouse', {
-            sellerId,
-            name,
-            tags,
-            provinceCode,
-            cityCode,
-            districtCode,
-            address,
-            creator,
-            createDt: new Date()
-        });
-
+    async addWarehouse(data) {
+        await this.ctx.helper.validateMySeller(data.sellerId);
+        const res = await this.ctx.dao.warehouse.add('warehouse', data);
         return { success: true, id: res.insertId };
     }
 
-    async updateWarehouse({
-        id,
-        sellerId,
-        name,
-        tags,
-        provinceCode,
-        cityCode,
-        districtCode,
-        address,
-    }) {
-        const conn = await this.app.mysql.get('stock');
-
-        await conn.update('warehouse', {
-            sellerId,
-            name,
-            tags,
-            provinceCode,
-            cityCode,
-            districtCode,
-            address
-        }, {
-            where: {
-                id
-            }
-        });
-
+    async updateWarehouse(data) {
+        await this.ctx.dao.warehouse.update(data);
         return { success: true };
     }
 }

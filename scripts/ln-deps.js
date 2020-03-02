@@ -9,3 +9,4 @@ const ln = (moduleName) => {
 ln('sonorpc');
 ln('egg-sn-auth');
 ln('egg-sn-gateway');
+ln('egg-dao');

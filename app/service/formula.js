@@ -1,8 +1,8 @@
 const { Service } = require("egg");
 
 class FormulaService extends Service {
-    listFormula({ id, sellerId, name, pageIndex, pageSize }) {
-        return this.app.productRPC.invoke('formula.listFormula', [{ id, sellerId, name, pageIndex, pageSize }]);
+    queryFormula({ id, sellerId, name, pageIndex, pageSize }) {
+        return this.app.productRPC.invoke('formula.queryFormula', [{ id, sellerId, name, pageIndex, pageSize }]);
     }
 
     getFormulaById(id) {

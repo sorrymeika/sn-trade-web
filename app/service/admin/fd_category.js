@@ -1,8 +1,8 @@
 const { Service } = require("egg");
 
 class FdCategoryService extends Service {
-    getLevel1Cates(sellerId) {
-        return this.app.productRPC.invoke('fdCategory.getLevel1Cates', [sellerId]);
+    getCatesBySellerId(sellerId) {
+        return this.app.productRPC.invoke('fdCategory.getCatesBySellerId', [sellerId]);
     }
 
     getSubCatesTreeByPid(pid) {

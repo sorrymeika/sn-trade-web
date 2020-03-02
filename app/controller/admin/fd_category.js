@@ -1,7 +1,7 @@
 const { Controller } = require("egg");
 
 class FdCategoryController extends Controller {
-    async getLevel1Cates() {
+    async getCatesBySellerId() {
         const { ctx } = this;
 
         const payloadRule = {
@@ -13,7 +13,7 @@ class FdCategoryController extends Controller {
             sellerId
         } = ctx.request.body;
 
-        const result = await ctx.service.admin.fdCategory.getLevel1Cates(sellerId);
+        const result = await ctx.service.admin.fdCategory.getCatesBySellerId(sellerId);
         ctx.body = result;
     }
 

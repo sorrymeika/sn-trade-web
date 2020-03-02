@@ -1,3 +1,5 @@
+const { Dao } = require('egg-dao');
+
 const pad = (num) => (num + '').padStart(2, '0');
 
 function createCode(id, type) {
@@ -8,9 +10,53 @@ function createCode(id, type) {
     return code;
 }
 
-class StockInDao {
-    constructor(conn) {
-        this.conn = conn;
+class StockInDao extends Dao {
+    static clientName() {
+        return 'stock';
+    }
+
+    query(params, pageIndex, pageSize) {
+        const {
+            type,
+            status,
+            code,
+            sellerId,
+            warehouseId,
+            warehouseType,
+        } = params;
+        const columns = ['id', 'code', 'sellerId', 'warehouseId', 'warehouseType', 'note', 'refundId', 'status', 'creator', 'createDt', 'modifyer', 'modifyDt', 'approver', 'approveDt'];
+        let where = {};
+
+        if (typeof sellerId === 'number' || (Array.isArray(sellerId) && sellerId.length > 0)) {
+            where.sellerId = sellerId;
+        }
+
+        if (code) {
+            where.code = code;
+        } else {
+            if (typeof type === 'number') {
+                where.type = type;
+            }
+
+            if (typeof status === 'number') {
+                where.status = status;
+            }
+
+            if (typeof warehouseType === 'number' && typeof warehouseId === 'number') {
+                where.warehouseId = warehouseId;
+                where.warehouseType = warehouseType;
+            }
+        }
+
+        return this.connection.selectPage(
+            columns,
+            "stockIn",
+            {
+                where,
+                pageIndex,
+                pageSize
+            }
+        );
     }
 
     async addStockIn({
@@ -22,7 +68,6 @@ class StockInDao {
         refundId,
         creator
     }) {
-        const { conn } = this;
         const data = {
             sellerId,
             warehouseType,
@@ -32,6 +77,7 @@ class StockInDao {
             refundId,
             creator
         };
+        const conn = this.connection;
         const res = await conn.insert('stockIn', data);
         const code = createCode(res.insertId, type);
         await conn.query('update stockIn set code=? where id=?', [code, res.insertId]);
@@ -42,10 +88,8 @@ class StockInDao {
     }
 
     addStockInDetails(details) {
-        return this.conn.insert('stockDetails', [details]);
+        return this.connection.insert('stockDetails', details);
     }
 }
 
-module.exports = function (conn) {
-    return new StockInDao(conn);
-};
+module.exports = StockInDao;

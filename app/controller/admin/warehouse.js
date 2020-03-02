@@ -20,30 +20,15 @@ class WarehouseController extends Controller {
 
         const body = ctx.request.body;
 
-        const { accountId } = ctx;
         const {
             id,
             sellerId,
             keywords,
         } = body;
 
-        let sellerIds;
-
-        if (sellerId) {
-            const { value: isMySeller } = await this.app.sellerRPC.invoke('seller.isMySeller', [accountId, sellerId]);
-            if (!isMySeller) {
-                ctx.body = NO_PERMISSION;
-                return;
-            }
-        } else {
-            const { data: ids } = await this.app.sellerRPC.invoke('seller.listMySellerIds', [accountId]);
-            sellerIds = ids;
-        }
-
         const result = await ctx.service.admin.warehouse.queryWarehouses({
             id,
             sellerId,
-            sellerIds,
             keywords,
         });
         ctx.body = result;

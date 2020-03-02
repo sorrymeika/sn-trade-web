@@ -37,6 +37,8 @@ class OrderController extends Controller {
                     id: { type: 'number', required: true },
                     warehouseType: { type: 'number', required: true },
                     warehouseId: { type: 'number', required: true },
+                    expressCompanyId: { type: 'number', required: true },
+                    expressCode: { type: 'string', required: true },
                     remarks: { type: 'string', required: false },
                 },
                 required: true

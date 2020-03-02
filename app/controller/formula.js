@@ -1,7 +1,7 @@
 const { Controller } = require("egg");
 
 class FormulaController extends Controller {
-    async listFormula() {
+    async queryFormula() {
         const { ctx } = this;
 
         const payloadRule = {
@@ -23,7 +23,7 @@ class FormulaController extends Controller {
             pageSize
         } = body;
 
-        const result = await ctx.service.formula.listFormula({
+        const result = await ctx.service.formula.queryFormula({
             id,
             sellerId,
             name,

@@ -22,3 +22,8 @@ exports.gateway = {
     enable: true,
     package: 'egg-sn-gateway',
 };
+
+exports.gateway = {
+    enable: true,
+    package: 'egg-dao',
+};

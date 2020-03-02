@@ -1,15 +1,15 @@
 const { Service } = require("egg");
 
 class ProductService extends Service {
-    listSpuTypes() {
-        return this.app.productRPC.invoke('product.listSpuTypes');
+    getSpuTypes() {
+        return this.app.productRPC.invoke('product.getSpuTypes');
     }
 
     getSpusByIds(spuIds) {
         return this.app.productRPC.invoke('product.getSpusByIds', [spuIds]);
     }
 
-    listSpu({
+    querySpus({
         spuId,
         title,
         status,
@@ -23,7 +23,7 @@ class ProductService extends Service {
         pageIndex,
         pageSize
     }) {
-        return this.app.productRPC.invoke('product.listSpu', [{
+        return this.app.productRPC.invoke('product.querySpus', [{
             spuId,
             title,
             status,

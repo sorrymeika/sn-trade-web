@@ -23,8 +23,20 @@ class ProductController extends Controller {
         ctx.body = res;
     }
 
-    getSpusByIds(spuIds) {
-        return this.app.productRPC.invoke('product.getSpusByIds', [spuIds]);
+    async getSpusByIds() {
+        const { ctx } = this;
+        const payloadRule = {
+            spuIds: { type: 'array', required: true, itemType: 'number' },
+        };
+        ctx.validate(payloadRule);
+
+        const { spuIds } = ctx.request.body;
+        if (!spuIds.length) {
+            ctx.body = { success: true, data: [] };
+        } else {
+            const res = await ctx.service.product.getSpusByIds(spuIds);
+            ctx.body = res;
+        }
     }
 }
 

@@ -8,6 +8,7 @@ const PAY_EXPIRE_TIME = 1000 * 60 * 30;
 
 class OrderService extends Service {
     async queryOrders({ statusType, sellerId, tradeCode, tradeId, sellerOrderId, receiver, phoneNo, pageIndex, pageSize }) {
+
         if ((typeof pageIndex !== 'number' || pageIndex <= 0) || (typeof pageSize !== 'number' || pageSize <= 0)) {
             return PARAM_ERROR;
         }
@@ -98,7 +99,7 @@ class OrderService extends Service {
             }
         });
 
-        const { data: sellers } = await this.app.sellerRPC.invoke('seller.listSellerByIds', [sellerIds]);
+        const { data: sellers } = await this.app.sellerRPC.invoke('seller.getSellersByIds', [sellerIds]);
         orderRows.forEach(current => {
             const seller = sellers.find(row => row.id == current.sellerId);
             if (seller) {
@@ -160,7 +161,7 @@ class OrderService extends Service {
 
         return Promise.all([
             // 获取商户信息
-            this.app.sellerRPC.invoke('seller.listSellerByIds', [sellerIds])
+            this.app.sellerRPC.invoke('seller.getSellersByIds', [sellerIds])
                 .then(sellersRes => {
                     if (sellersRes.success) {
                         sellerOrderRows.forEach(current => {
@@ -232,7 +233,7 @@ class OrderService extends Service {
         );
 
         for (let i = 0; i < sellerOrderRows.length; i++) {
-            const isMySeller = await this.ctx.isMySeller(sellerOrderRows[i].sellerId);
+            const isMySeller = await this.ctx.helper.isMySeller(sellerOrderRows[i].sellerId);
             if (!isMySeller.success) {
                 return isMySeller;
             }
@@ -244,8 +245,22 @@ class OrderService extends Service {
 
         for (let i = 0; i < sellerOrderRows.length; i++) {
             const { sellerId, id } = sellerOrderRows[i];
-            const { warehouseType, warehouseId } = sellerOrders.find(sellerOrder => sellerOrder.id === id);
-            const stockRes = await this.app.stockRPC.invoke('stock.sendOut', [sellerId, id, warehouseType, warehouseId]);
+            const {
+                warehouseType,
+                warehouseId,
+                expressCompanyId,
+                expressCode,
+                remarks,
+            } = sellerOrders.find(sellerOrder => sellerOrder.id === id);
+            const stockRes = await this.app.stockRPC.invoke('stock.sendOut', [{
+                sellerId,
+                sellerOrderId: id,
+                warehouseType,
+                warehouseId,
+                expressCompanyId,
+                expressCode,
+                remarks,
+            }]);
             if (!stockRes.success) {
                 return stockRes;
             }

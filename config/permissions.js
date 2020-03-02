@@ -39,11 +39,11 @@ module.exports = [
     },
 
     {
-        url: '/admin/product/listSpuTypes',
+        url: '/admin/product/getSpuTypes',
         apps: [1, 2],
         permissionIds: []
     }, {
-        url: '/admin/product/listSpu',
+        url: '/admin/product/querySpus',
         apps: [1, 2],
         permissionIds: []
     }, {

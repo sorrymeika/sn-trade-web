@@ -1,9 +1,9 @@
 const { Controller } = require("egg");
 
 class ProductController extends Controller {
-    async listSpuTypes() {
+    async getSpuTypes() {
         const { ctx } = this;
-        const res = await ctx.service.admin.product.listSpuTypes();
+        const res = await ctx.service.admin.product.getSpuTypes();
 
         ctx.body = res;
     }
@@ -24,7 +24,7 @@ class ProductController extends Controller {
         }
     }
 
-    async listSpu() {
+    async querySpus() {
         const { ctx } = this;
         const payloadRule = {
             spuId: { type: 'number', required: false },
@@ -42,7 +42,7 @@ class ProductController extends Controller {
         };
         ctx.validate(payloadRule);
 
-        const res = await ctx.service.admin.product.listSpu(ctx.request.body);
+        const res = await ctx.service.admin.product.querySpus(ctx.request.body);
         ctx.body = res;
     }
 
@@ -158,7 +158,6 @@ class ProductController extends Controller {
 
         const payloadRule = {
             spuId: { type: 'number', required: true },
-            code: { type: 'string', required: true },
             price: { type: 'number', required: true },
             kgWeight: { type: 'number', required: true },
             picture: { type: 'string', required: true },
@@ -180,7 +179,6 @@ class ProductController extends Controller {
 
         const payloadRule = {
             id: { type: 'number', required: true },
-            code: { type: 'string', required: true },
             price: { type: 'number', required: true },
             kgWeight: { type: 'number', required: true },
             picture: { type: 'string', required: true },

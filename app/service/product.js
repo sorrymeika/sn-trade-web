@@ -20,7 +20,7 @@ class ProductService extends Service {
                     }
                 }
 
-                const spuProps = basicInfo.data.props ? JSON.parse(basicInfo.data.props) : {};
+                const spuProps = basicInfo.data.props || {};
 
                 return {
                     success: true,
@@ -48,8 +48,8 @@ class ProductService extends Service {
         return this.app.productRPC.invoke('product.getBasicInfoById', [id])
             .then((res) => {
                 return Promise.all([
-                    this.app.sellerRPC.invoke('seller.getSellerInfoById', [res.data.sellerId]),
-                    this.app.productRPC.invoke('category.getSpuPropDefinitions', [res.data.subSubCateId, 'least'])
+                    this.app.sellerRPC.invoke('seller.getSellerById', [res.data.sellerId]),
+                    this.app.productRPC.invoke('category.getSpuPropDefinitions', [res.data.subSubCateId])
                 ])
                     .then(([seller, spuPropDefinitions]) => {
                         res.seller = seller.data;

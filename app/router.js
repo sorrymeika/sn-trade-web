@@ -17,8 +17,11 @@ module.exports = app => {
     router.post('/admin/category/addSpuPropDefinition', controller.admin.category.addSpuPropDefinition);
     router.post('/admin/category/updateSpuPropDefinition', controller.admin.category.updateSpuPropDefinition);
 
+    // 快递
+    router.post('/admin/express/getExpressCompanies', controller.admin.express.getExpressCompanies);
+
     // 前台类目
-    router.post('/admin/fdCategory/getLevel1Cates', controller.admin.fdCategory.getLevel1Cates);
+    router.post('/admin/fdCategory/getCatesBySellerId', controller.admin.fdCategory.getCatesBySellerId);
     router.post('/admin/fdCategory/getSubCatesTreeByPid', controller.admin.fdCategory.getSubCatesTreeByPid);
     router.post('/admin/fdCategory/add', controller.admin.fdCategory.add);
     router.post('/admin/fdCategory/update', controller.admin.fdCategory.update);
@@ -31,8 +34,8 @@ module.exports = app => {
     router.post('/brand/update', controller.brand.updateBrand);
 
     // 商品
-    router.post('/admin/product/listSpuTypes', controller.admin.product.listSpuTypes);
-    router.post('/admin/product/listSpu', controller.admin.product.listSpu);
+    router.post('/admin/product/getSpuTypes', controller.admin.product.getSpuTypes);
+    router.post('/admin/product/querySpus', controller.admin.product.querySpus);
     router.post('/admin/product/getSpusByIds', controller.product.getSpusByIds);
     router.post('/admin/product/getSpuById', controller.admin.product.getSpuById);
 
@@ -48,7 +51,7 @@ module.exports = app => {
     router.post('/admin/product/pullSkuFromShelves', controller.admin.product.pullSkuFromShelves);
 
     // 选品规则
-    router.post('/formula/list', controller.formula.listFormula);
+    router.post('/formula/list', controller.formula.queryFormula);
     router.post('/formula/getById', controller.formula.getFormulaById);
     router.post('/formula/add', controller.formula.addFormula);
     router.post('/formula/update', controller.formula.updateFormula);
